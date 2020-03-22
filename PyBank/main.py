@@ -5,8 +5,9 @@ import os
 #read csv
 csvpath = os.path.join("Resources", "budget_data.csv")
 
+#initialize
 profits = []
-month_count = 0
+months = 0
 
 
 with open(csvpath) as csvfiles:
@@ -20,26 +21,30 @@ with open(csvpath) as csvfiles:
 
     # assign values/location
 
-    month_count += 1
+    months += 1
     value = int(next_row[1])
     total = int(next_row[1])
 
-    greatest_profit = {"Date": next_row[0], "value": 0}
-    greatest_loss = {"Date": next_row[0], "value": 0}
+    profit = {"date": next_row[0], 
+                       "value": 0}
+    loss =   {"date": next_row[0], 
+                     "value": 0}
 
     for row in csv_reader:
-        month_count += 1
+        months += 1
         total = total +int(row[1])
 
         change = int(row[1])-int(value)
 
         if len(profits) > 0:
             if change > max(profits):
-                greatest_profit["value"] = change
-                greatest_profit["Date"] = row[0]
+                profit["date"] = row[0]
+                profit["value"] = change
+                
             elif change < min(profits):
-                greatest_loss["value"] = change
-                greatest_loss["Date"] = row[0]
+                loss["date"] = row[0]
+                loss["value"] = change
+                
 
 
         profits.append(change)
@@ -47,16 +52,15 @@ with open(csvpath) as csvfiles:
 
        
     average_change = sum(profits)/len(profits)
-    greatest_increase_amount = max(profits)
-    greatest_decrease_amount = min(profits)
+    
 
     
    
     print("Financial Analysis")
     print("--------------------------------")
-    print("Total Months: " + str(month_count))
+    print("Total Months: " + str(months))
     print("Total: $" + str(total))
     print("Average Change: $" + str(round(average_change, 2)))
-    print("Greatest Increase in Profits: " + "($" + str(greatest_increase_amount) + ")")
-    #print(f"Greatest Increase in Profits: {greatest_increase_amount['Date']}({greatest_increase_amount['value']})")
-    print("Greatest Decrease in Profits: " + "($" +str(greatest_decrease_amount) + ")")
+    print(f'Greatest Increase in Profits: {profit["date"]} (${profit["value"]})')
+    print(f'Greatest Decrease in Profits: {loss["date"]} (${loss["value"]})')
+   
